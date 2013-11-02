@@ -16,7 +16,7 @@ import javax.xml.ws.ResponseWrapper;
  * Generated source version: 2.2
  * 
  */
-@WebService(name = "PlantSOAPService", targetNamespace = "http://web.soap.domain.ut.cs/")
+@WebService(name = "PlantSOAPService", targetNamespace = "http://service.soap.domain.ut.cs/")
 @XmlSeeAlso({
     ObjectFactory.class
 })
@@ -30,9 +30,9 @@ public interface PlantSOAPService {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getAllPlants", targetNamespace = "http://web.soap.domain.ut.cs/", className = "cs.ut.domain.soap.client.GetAllPlants")
-    @ResponseWrapper(localName = "getAllPlantsResponse", targetNamespace = "http://web.soap.domain.ut.cs/", className = "cs.ut.domain.soap.client.GetAllPlantsResponse")
-    @Action(input = "http://web.soap.domain.ut.cs/PlantSOAPService/getAllPlantsRequest", output = "http://web.soap.domain.ut.cs/PlantSOAPService/getAllPlantsResponse")
+    @RequestWrapper(localName = "getAllPlants", targetNamespace = "http://service.soap.domain.ut.cs/", className = "cs.ut.domain.soap.client.GetAllPlants")
+    @ResponseWrapper(localName = "getAllPlantsResponse", targetNamespace = "http://service.soap.domain.ut.cs/", className = "cs.ut.domain.soap.client.GetAllPlantsResponse")
+    @Action(input = "http://service.soap.domain.ut.cs/PlantSOAPService/getAllPlantsRequest", output = "http://service.soap.domain.ut.cs/PlantSOAPService/getAllPlantsResponse")
     public PlantResourceList getAllPlants();
 
 }
