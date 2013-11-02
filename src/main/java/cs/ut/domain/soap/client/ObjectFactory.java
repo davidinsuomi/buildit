@@ -24,15 +24,24 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _Plants_QNAME = new QName("http://service.soap.domain.ut.cs/", "plants");
-    private final static QName _GetAllPlantsResponse_QNAME = new QName("http://service.soap.domain.ut.cs/", "getAllPlantsResponse");
-    private final static QName _GetAllPlants_QNAME = new QName("http://service.soap.domain.ut.cs/", "getAllPlants");
+    private final static QName _Plant_QNAME = new QName("http://web.soap.domain.ut.cs/", "plant");
+    private final static QName _GetAllPlants_QNAME = new QName("http://web.soap.domain.ut.cs/", "getAllPlants");
+    private final static QName _GetAllPlantsResponse_QNAME = new QName("http://web.soap.domain.ut.cs/", "getAllPlantsResponse");
+    private final static QName _Plants_QNAME = new QName("http://web.soap.domain.ut.cs/", "plants");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: cs.ut.domain.soap.client
      * 
      */
     public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link PlantResource }
+     * 
+     */
+    public PlantResource createPlantResource() {
+        return new PlantResource();
     }
 
     /**
@@ -60,30 +69,39 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link PlantResourceList }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link PlantResource }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://service.soap.domain.ut.cs/", name = "plants")
-    public JAXBElement<PlantResourceList> createPlants(PlantResourceList value) {
-        return new JAXBElement<PlantResourceList>(_Plants_QNAME, PlantResourceList.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetAllPlantsResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://service.soap.domain.ut.cs/", name = "getAllPlantsResponse")
-    public JAXBElement<GetAllPlantsResponse> createGetAllPlantsResponse(GetAllPlantsResponse value) {
-        return new JAXBElement<GetAllPlantsResponse>(_GetAllPlantsResponse_QNAME, GetAllPlantsResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://web.soap.domain.ut.cs/", name = "plant")
+    public JAXBElement<PlantResource> createPlant(PlantResource value) {
+        return new JAXBElement<PlantResource>(_Plant_QNAME, PlantResource.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetAllPlants }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://service.soap.domain.ut.cs/", name = "getAllPlants")
+    @XmlElementDecl(namespace = "http://web.soap.domain.ut.cs/", name = "getAllPlants")
     public JAXBElement<GetAllPlants> createGetAllPlants(GetAllPlants value) {
         return new JAXBElement<GetAllPlants>(_GetAllPlants_QNAME, GetAllPlants.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetAllPlantsResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://web.soap.domain.ut.cs/", name = "getAllPlantsResponse")
+    public JAXBElement<GetAllPlantsResponse> createGetAllPlantsResponse(GetAllPlantsResponse value) {
+        return new JAXBElement<GetAllPlantsResponse>(_GetAllPlantsResponse_QNAME, GetAllPlantsResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PlantResourceList }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://web.soap.domain.ut.cs/", name = "plants")
+    public JAXBElement<PlantResourceList> createPlants(PlantResourceList value) {
+        return new JAXBElement<PlantResourceList>(_Plants_QNAME, PlantResourceList.class, null, value);
     }
 
 }

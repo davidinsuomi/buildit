@@ -4,6 +4,7 @@
 package cs.ut.domain;
 
 import cs.ut.domain.ApplicationConversionServiceFactoryBean;
+import cs.ut.domain.Plant;
 import cs.ut.domain.PlantHireRequest;
 import cs.ut.domain.Site;
 import cs.ut.domain.SiteEngineer;
@@ -15,6 +16,30 @@ import org.springframework.format.FormatterRegistry;
 privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService {
     
     declare @type: ApplicationConversionServiceFactoryBean: @Configurable;
+    
+    public Converter<Plant, String> ApplicationConversionServiceFactoryBean.getPlantToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<cs.ut.domain.Plant, java.lang.String>() {
+            public String convert(Plant plant) {
+                return new StringBuilder().append(plant.getName()).append(' ').append(plant.getDescription()).append(' ').append(plant.getPricePerDay()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, Plant> ApplicationConversionServiceFactoryBean.getIdToPlantConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, cs.ut.domain.Plant>() {
+            public cs.ut.domain.Plant convert(java.lang.Long id) {
+                return Plant.findPlant(id);
+            }
+        };
+    }
+    
+    public Converter<String, Plant> ApplicationConversionServiceFactoryBean.getStringToPlantConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, cs.ut.domain.Plant>() {
+            public cs.ut.domain.Plant convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Plant.class);
+            }
+        };
+    }
     
     public Converter<PlantHireRequest, String> ApplicationConversionServiceFactoryBean.getPlantHireRequestToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<cs.ut.domain.PlantHireRequest, java.lang.String>() {
@@ -113,6 +138,9 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     }
     
     public void ApplicationConversionServiceFactoryBean.installLabelConverters(FormatterRegistry registry) {
+        registry.addConverter(getPlantToStringConverter());
+        registry.addConverter(getIdToPlantConverter());
+        registry.addConverter(getStringToPlantConverter());
         registry.addConverter(getPlantHireRequestToStringConverter());
         registry.addConverter(getIdToPlantHireRequestConverter());
         registry.addConverter(getStringToPlantHireRequestConverter());

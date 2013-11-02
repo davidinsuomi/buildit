@@ -69,6 +69,6 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean class="java.net.URI" id="dbUrl">
-    	<constructor-arg value="${DATABASE_URL}"/>
+    	<constructor-arg value="${DATABASE_URL_BUILD}"/>
     </bean>
 </beans>
