@@ -13,8 +13,4 @@
 <definition extends="default" name="planthirerequests/update">
         <put-attribute name="body" value="/WEB-INF/views/planthirerequests/update.jspx"/>
     </definition>
-    	<definition extends="default" name="planthirerequests/queryPlant/search">
-		<put-attribute name="body"
-			value="/WEB-INF/views/planthirerequests/queryplant/search.jspx" />
-	</definition> 
 </tiles-definitions>
