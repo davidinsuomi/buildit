@@ -21,6 +21,11 @@
 			<td>startDate</td>
 			<td>${startDate}</td>
 		</tr>
+		
+		<tr>
+			<td>endDate</td>
+			<td>${endDate}</td>
+		</tr>
 	</table>
 </body>
 	</html>

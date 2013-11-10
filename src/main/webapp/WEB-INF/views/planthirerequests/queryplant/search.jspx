@@ -16,6 +16,11 @@
 					id="c_ut_ee_domain_PlantHR_startR" />
 			</tr>
 			<tr>
+				<field:datetime dateTimePattern="${plantHRBean_startr_date_format}"
+					field="endDate" label="End date"
+					id="c_ut_ee_domain_PlantHR_endR" />
+			</tr>
+			<tr>
 				<input type="submit" value="Search plants" />
 			</tr>
 		</table>

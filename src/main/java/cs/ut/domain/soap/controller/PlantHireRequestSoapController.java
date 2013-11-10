@@ -30,10 +30,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class PlantHireRequestSoapController {
 
-	@RequestMapping(value="/planthirerequests/queryPlant" , method = RequestMethod.GET)
+	@RequestMapping(value = "/planthirerequests/queryPlant", method = RequestMethod.GET)
 	public String queryPlant(ModelMap model) {
 		System.out.println("controller");
-		//addDateTimeFormatPatterns(model);
+		// addDateTimeFormatPatterns(model);
 		model.addAttribute("plantquery", new PlantDataTransferObject());
 		return "planthirerequests/queryPlant/search";
 	}
@@ -49,40 +49,50 @@ public class PlantHireRequestSoapController {
 						LocaleContextHolder.getLocale()));
 	}
 
-
-	
-	@RequestMapping(value="/planthirerequests/queryPlant" , method = RequestMethod.POST)
+	@RequestMapping(value = "/planthirerequests/queryPlant", method = RequestMethod.POST)
 	public String displayPlant(@Valid PlantDataTransferObject plant,
-			ModelMap model, HttpServletRequest request) throws DatatypeConfigurationException {
-		
+			ModelMap model, HttpServletRequest request)
+			throws DatatypeConfigurationException {
+
 		PlantSOAPServiceService plantService = new PlantSOAPServiceService();
 		PlantSOAPService plantPort = plantService.getPlantSOAPServicePort();
-		PlantResourceList plantList =plantPort.getAllPlants();
+		PlantResourceList plantList = plantPort.getAllPlants();
 		List<PlantResource> plants = plantList.getListOfPlantResources();
 		for (PlantResource plantResource : plants) {
 			System.out.println(plantResource.getPlantName());
 			if (plantResource.getPlantName().equalsIgnoreCase(plant.getName()))
 
 			{
+				GregorianCalendar start, end;
 
 				PurchaseOrderResource poResource = new PurchaseOrderResource();
 				poResource.setPlantResource(plantResource);
-				BigDecimal totalcost = new BigDecimal(100);
-				poResource.setTotalCost(totalcost);
-				String startDate=plant.getStartDate().toString();
-				XMLGregorianCalendar xgc=DatatypeFactory.newInstance().newXMLGregorianCalendar(startDate);
+				start = plant.getStartDate().toGregorianCalendar();
+				end = plant.getEndDate().toGregorianCalendar();
+				int days = daysBetween(start.getTime(),end.getTime());
+				int priceperday = plantResource.getPricePerDay().intValue();
+				int totalCost = days * priceperday;
+				BigDecimal total = new BigDecimal (totalCost);
+				poResource.setTotalCost(total);
+				String startDate = plant.getStartDate().toString();
+				XMLGregorianCalendar xgc = DatatypeFactory.newInstance()
+						.newXMLGregorianCalendar(startDate);
 				poResource.setEndDate(xgc);
 				poResource.setStartDate(xgc);
 				plantPort.createPurchaseOrder(poResource);
-				
-				
-				//plantPort.createPurchaseOrder(arg0);
+
+				// plantPort.createPurchaseOrder(arg0);
 			}
 		}
 		model.addAttribute("name", plant.getName());
 		model.addAttribute("startDate", plant.getStartDate());
+		model.addAttribute("endDate", plant.getEndDate());
 		System.out.println("this is the result mapping");
 		return "planthirerequests/queryPlant/result";
 
+	}
+
+	public int daysBetween(Date d1, Date d2) {
+		return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
 	}
 }
