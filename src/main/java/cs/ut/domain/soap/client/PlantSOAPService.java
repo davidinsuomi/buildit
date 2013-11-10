@@ -2,6 +2,7 @@
 package cs.ut.domain.soap.client;
 
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSeeAlso;
@@ -16,7 +17,7 @@ import javax.xml.ws.ResponseWrapper;
  * Generated source version: 2.2
  * 
  */
-@WebService(name = "PlantSOAPService", targetNamespace = "http://service.soap.domain.ut.cs/")
+@WebService(name = "PlantSOAPService", targetNamespace = "http://web.soap.domain.ut.cs/")
 @XmlSeeAlso({
     ObjectFactory.class
 })
@@ -30,9 +31,21 @@ public interface PlantSOAPService {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getAllPlants", targetNamespace = "http://service.soap.domain.ut.cs/", className = "cs.ut.domain.soap.client.GetAllPlants")
-    @ResponseWrapper(localName = "getAllPlantsResponse", targetNamespace = "http://service.soap.domain.ut.cs/", className = "cs.ut.domain.soap.client.GetAllPlantsResponse")
-    @Action(input = "http://service.soap.domain.ut.cs/PlantSOAPService/getAllPlantsRequest", output = "http://service.soap.domain.ut.cs/PlantSOAPService/getAllPlantsResponse")
+    @RequestWrapper(localName = "getAllPlants", targetNamespace = "http://web.soap.domain.ut.cs/", className = "cs.ut.domain.soap.client.GetAllPlants")
+    @ResponseWrapper(localName = "getAllPlantsResponse", targetNamespace = "http://web.soap.domain.ut.cs/", className = "cs.ut.domain.soap.client.GetAllPlantsResponse")
+    @Action(input = "http://web.soap.domain.ut.cs/PlantSOAPService/getAllPlantsRequest", output = "http://web.soap.domain.ut.cs/PlantSOAPService/getAllPlantsResponse")
     public PlantResourceList getAllPlants();
+
+    /**
+     * 
+     * @param arg0
+     */
+    @WebMethod(operationName = "CreatePurchaseOrder")
+    @RequestWrapper(localName = "CreatePurchaseOrder", targetNamespace = "http://web.soap.domain.ut.cs/", className = "cs.ut.domain.soap.client.CreatePurchaseOrder")
+    @ResponseWrapper(localName = "CreatePurchaseOrderResponse", targetNamespace = "http://web.soap.domain.ut.cs/", className = "cs.ut.domain.soap.client.CreatePurchaseOrderResponse")
+    @Action(input = "http://web.soap.domain.ut.cs/PlantSOAPService/CreatePurchaseOrderRequest", output = "http://web.soap.domain.ut.cs/PlantSOAPService/CreatePurchaseOrderResponse")
+    public void createPurchaseOrder(
+        @WebParam(name = "arg0", targetNamespace = "")
+        PurchaseOrderResource arg0);
 
 }

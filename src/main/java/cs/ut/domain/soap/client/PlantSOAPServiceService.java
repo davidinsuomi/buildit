@@ -17,20 +17,20 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "PlantSOAPServiceService", targetNamespace = "http://service.soap.domain.ut.cs/", wsdlLocation = "http://localhost:8081/Rentit/PlantSOAPService?wsdl")
+@WebServiceClient(name = "PlantSOAPServiceService", targetNamespace = "http://web.soap.domain.ut.cs/", wsdlLocation = "http://localhost:8080/Rentit/PlantSOAPService?wsdl")
 public class PlantSOAPServiceService
     extends Service
 {
 
     private final static URL PLANTSOAPSERVICESERVICE_WSDL_LOCATION;
     private final static WebServiceException PLANTSOAPSERVICESERVICE_EXCEPTION;
-    private final static QName PLANTSOAPSERVICESERVICE_QNAME = new QName("http://service.soap.domain.ut.cs/", "PlantSOAPServiceService");
+    private final static QName PLANTSOAPSERVICESERVICE_QNAME = new QName("http://web.soap.domain.ut.cs/", "PlantSOAPServiceService");
 
     static {
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://localhost:8081/Rentit/PlantSOAPService?wsdl");
+            url = new URL("http://localhost:8080/Rentit/PlantSOAPService?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
@@ -69,7 +69,7 @@ public class PlantSOAPServiceService
      */
     @WebEndpoint(name = "PlantSOAPServicePort")
     public PlantSOAPService getPlantSOAPServicePort() {
-        return super.getPort(new QName("http://service.soap.domain.ut.cs/", "PlantSOAPServicePort"), PlantSOAPService.class);
+        return super.getPort(new QName("http://web.soap.domain.ut.cs/", "PlantSOAPServicePort"), PlantSOAPService.class);
     }
 
     /**
@@ -81,7 +81,7 @@ public class PlantSOAPServiceService
      */
     @WebEndpoint(name = "PlantSOAPServicePort")
     public PlantSOAPService getPlantSOAPServicePort(WebServiceFeature... features) {
-        return super.getPort(new QName("http://service.soap.domain.ut.cs/", "PlantSOAPServicePort"), PlantSOAPService.class, features);
+        return super.getPort(new QName("http://web.soap.domain.ut.cs/", "PlantSOAPServicePort"), PlantSOAPService.class, features);
     }
 
     private static URL __getWsdlLocation() {

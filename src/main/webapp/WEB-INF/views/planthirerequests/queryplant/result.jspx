@@ -1,0 +1,27 @@
+<div xmlns:spring="http://www.springframework.org/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:form="http://www.springframework.org/tags/form"
+	xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<html>
+<head>
+<title>Spring MVC Form Handling</title>
+</head>
+<body>
+
+	<h2>Submitted Student Information</h2>
+	<table>
+		<tr>
+			<td>Name</td>
+			<td>${name}</td>
+		</tr>
+		<tr>
+			<td>startDate</td>
+			<td>${startDate}</td>
+		</tr>
+	</table>
+</body>
+	</html>
+</div>

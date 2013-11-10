@@ -3,11 +3,7 @@ package cs.ut.domain.rest.controller;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.net.URI;
-import java.util.Date;
-
-import javax.ws.rs.core.MediaType;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,26 +15,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-
 import cs.ut.domain.ApprovalStatus;
-import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.PlantHireRequest;
 import cs.ut.domain.rest.PlantHireRequestResource;
 import cs.ut.domain.rest.PlantHireRequestResourceAssembler;
-import cs.ut.domain.rest.PlantResource;
-import cs.ut.domain.rest.PurchaseOrderResource;
+import cs.ut.domain.rest.PlantHireRequestResourceStatus;
 import cs.ut.util.ExtendedLink;
-import cs.ut.util.LoadProperties;
 
 @Controller
-@RequestMapping("/rest/phr/")
+@RequestMapping("/rest")
 public class PlantHireRequestRestController {
 
-	@RequestMapping(method = RequestMethod.POST, value = "")
-	public ResponseEntity<PlantHireRequestResource> createPHR(
+	@RequestMapping(method = RequestMethod.POST, value = "/phr")
+	public ResponseEntity<Void> createPlantHireRequestResource(
 			@RequestBody PlantHireRequestResource res) {
 
 		PlantHireRequest phr = new PlantHireRequest();
@@ -51,117 +40,70 @@ public class PlantHireRequestRestController {
 		phr.setTotalCost(res.getTotalCost());
 		phr.setStatus(res.getStatus());
 		phr.persist();
-		
-		PlantHireRequestResourceAssembler assembler = new PlantHireRequestResourceAssembler();
-		PlantHireRequestResource resource = assembler.toResource(phr);
-	
-		try {
-			addMethodLink(phr, resource, "approvePHR", "PUT");
-			addMethodLink(phr, resource, "rejectPHR", "DELETE");
-			addMethodLinkWithResource(phr, resource, "updatePHR", "PUT");
-			addMethodLink(phr, resource, "cancelPHR", "DELETE");
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		}
-		
 		HttpHeaders headers = new HttpHeaders();
 		URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
 				.pathSegment(phr.getId().toString()).build().toUri();
 		headers.setLocation(location);
-		ResponseEntity<PlantHireRequestResource> response = new ResponseEntity<>(resource, headers,
+		ResponseEntity<Void> response = new ResponseEntity<>(headers,
 				HttpStatus.CREATED);
 		return response;
 	}
-	
-	
-	//OK
-	@RequestMapping(method = RequestMethod.DELETE, value = "{id}/reject")
-	public ResponseEntity<Void> rejectPHR(@PathVariable("id") Long id) {
-		PlantHireRequest phr = PlantHireRequest.findPlantHireRequest(id);
-		ResponseEntity<Void> response;
-		if (phr.getStatus().equals(ApprovalStatus.PENDING_APPROVAL)) {
-			phr.setStatus(ApprovalStatus.REJECTED);
-			phr.persist();		
-			response = new ResponseEntity<>(HttpStatus.OK);
-		} else
-			response = new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
-		return response;
-	}
-	
-	
-	//OK
-	@RequestMapping(method = RequestMethod.PUT, value = "{id}/approve")
-	public ResponseEntity<PurchaseOrderResource> approvePHR(@PathVariable("id") Long id) {
-		PlantHireRequest phr = PlantHireRequest.findPlantHireRequest(id);
-		ResponseEntity<PurchaseOrderResource> response;
-		if (phr.getStatus().equals(ApprovalStatus.PENDING_APPROVAL)) {
-			phr.setStatus(ApprovalStatus.APPROVED);
-			phr.persist();
-			Client client = new Client();
-			LoadProperties props = new LoadProperties();
-			String app_url = props.loadProperty("supplierurl");
-			WebResource webResource = client.resource(app_url + "/rest/pos/");
-			
-			PurchaseOrderResource poResource = new PurchaseOrderResource();
-			poResource.setEndDate(phr.getEndDate());
-			poResource.setStartDate(phr.getStartDate());
-			PlantResource pR = new PlantResource();
-			pR.setIdentifier(phr.getPlantId());
-			poResource.setPlantResource(pR);
-			poResource.setStatus(HireRequestStatus.PENDING_CONFIRMATION);
-			poResource.setTotalCost(phr.getTotalCost());
 
-			ClientResponse clientResponse = webResource
-					.type(MediaType.APPLICATION_XML)
-					.accept(MediaType.APPLICATION_XML)
-					.post(ClientResponse.class, poResource);
-			
-			PurchaseOrderResource after = clientResponse
-					.getEntity(PurchaseOrderResource.class);
-			
-			response = new ResponseEntity<>(after, HttpStatus.OK);
-		} else
-			response = new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
-		return response;
-	}
-
-	//OK
-	@RequestMapping(method = RequestMethod.PUT, value = "{id}")
-	public ResponseEntity<PlantHireRequestResource> updatePHR(
+	@RequestMapping(method = RequestMethod.PUT, value = "/phr/{id}")
+	public ResponseEntity<Void> createPlantHireRequestResource(
 			@PathVariable Long id, @RequestBody PlantHireRequestResource res) {
-		ResponseEntity<PlantHireRequestResource> response;
+
 		PlantHireRequest phr = PlantHireRequest.findPlantHireRequest(id);
-		
-		if (phr.getStatus().equals(ApprovalStatus.PENDING_APPROVAL)) {
-			phr.setEndDate(res.getEndDate());
-			phr.setPlantId(res.getPlantId());
-			phr.setSite(res.getSite());
-			phr.setSiteEngineer(res.getSiteEngineer());
-			phr.setStartDate(res.getStartDate());
-			phr.setSupplier(res.getSupplier());
-			phr.setTotalCost(res.getTotalCost());
-			phr.persist();
-			
-			PlantHireRequestResourceAssembler assembler = new PlantHireRequestResourceAssembler();
-			PlantHireRequestResource resource = assembler.toResource(phr);
-		
-			try {
-				addMethodLink(phr, resource, "approvePHR", "PUT");
-				addMethodLink(phr, resource, "rejectPHR", "DELETE");
-				addMethodLinkWithResource(phr, resource, "updatePHR", "PUT");
-				addMethodLink(phr, resource, "cancelPHR", "DELETE");
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			}
-			
-			response = new ResponseEntity<>(resource, HttpStatus.OK);
-		} else
-			response = new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		phr.setEndDate(res.getEndDate());
+		phr.setPlantId(res.getPlantId());
+		phr.setSite(res.getSite());
+		phr.setSiteEngineer(res.getSiteEngineer());
+		phr.setStartDate(res.getStartDate());
+		phr.setSupplier(res.getSupplier());
+		phr.setTotalCost(res.getTotalCost());
+		phr.setStatus(res.getStatus());
+		phr.persist();
+		HttpHeaders headers = new HttpHeaders();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
+				.pathSegment(phr.getId().toString()).build().toUri();
+		headers.setLocation(location);
+		ResponseEntity<Void> response = new ResponseEntity<>(headers,
+				HttpStatus.OK);
 		return response;
 	}
 
-	
-	@RequestMapping(method = RequestMethod.DELETE, value = "{id}/cancel")
+	/*
+	 * @RequestMapping(method = RequestMethod.DELETE, value =
+	 * "/phr/{id}/cancel") public ResponseEntity<Void>
+	 * cancelPlantHireRequestResource(
+	 * 
+	 * @PathVariable Long id,
+	 * 
+	 * @RequestBody PlantHireRequestResourceStatus res) {
+	 * 
+	 * PlantHireRequest phr = PlantHireRequest.findPlantHireRequest(id);
+	 * phr.setStatus(res.getStatus()); phr.persist(); HttpHeaders headers = new
+	 * HttpHeaders(); URI location =
+	 * ServletUriComponentsBuilder.fromCurrentRequestUri()
+	 * .pathSegment(phr.getId().toString()).build().toUri();
+	 * headers.setLocation(location); ResponseEntity<Void> response = new
+	 * ResponseEntity<>(headers, HttpStatus.OK); return response; }
+	 */
+
+	@RequestMapping(method = RequestMethod.GET, value = "/phr/{id}/status")
+	public ResponseEntity<PlantHireRequestResourceStatus> getPHRStatus(
+			@PathVariable Long id) {
+
+		PlantHireRequest phr = PlantHireRequest.findPlantHireRequest(id);
+		PlantHireRequestResourceStatus phrStatus = new PlantHireRequestResourceStatus();
+		PlantHireRequestResourceAssembler assembler = new PlantHireRequestResourceAssembler();
+		phrStatus = assembler.getPlantHireRequestStatus(phr);
+		ResponseEntity<PlantHireRequestResourceStatus> response = new ResponseEntity<>(
+				phrStatus, HttpStatus.OK);
+		return response;
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/phr/{id}/cancel")
 	public ResponseEntity<Void> cancelPHR(@PathVariable Long id) {
 		PlantHireRequest phr = PlantHireRequest.findPlantHireRequest(id);
 		ResponseEntity<Void> response;
@@ -175,33 +117,28 @@ public class PlantHireRequestRestController {
 		return response;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/phr/{id}")
 	public ResponseEntity<PlantHireRequestResource> getPHR(@PathVariable Long id) {
 		PlantHireRequest phr = PlantHireRequest.findPlantHireRequest(id);
-		PlantHireRequestResource resource = new PlantHireRequestResource();
+		PlantHireRequestResource phrResource = new PlantHireRequestResource();
 		PlantHireRequestResourceAssembler assembler = new PlantHireRequestResourceAssembler();
-		resource = assembler.toResource(phr);
+		phrResource = assembler.toResource(phr);
 
 		switch (phr.getStatus()) {
 		case PENDING_APPROVAL:
-			
 			try {
-				addMethodLink(phr, resource, "approvePHR", "PUT");
-				addMethodLink(phr, resource, "rejectPHR", "DELETE");
-				addMethodLinkWithResource(phr, resource, "updatePHR", "PUT");
-				addMethodLink(phr, resource, "cancelPHR", "DELETE");
+				addMethodLink(phr, phrResource, "cancelPHR", "DELETE");
 			} catch (NoSuchMethodException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 			break;
 		default:
 			break;
 		}
 
 		ResponseEntity<PlantHireRequestResource> response = new ResponseEntity<>(
-				resource, HttpStatus.OK);
+				phrResource, HttpStatus.OK);
 		return response;
 	}
 
@@ -211,15 +148,6 @@ public class PlantHireRequestRestController {
 		Method methodLink = PlantHireRequestRestController.class.getMethod(
 				action, Long.class);
 		String link = linkTo(methodLink, phr.getId()).toUri().toString();
-		resource.add(new ExtendedLink(link, action, method));
-	}
-	
-	private void addMethodLinkWithResource(PlantHireRequest phr,
-			PlantHireRequestResource resource, String action,  String method) throws NoSuchMethodException {
-		Method methodLink = PlantHireRequestRestController.class.getMethod(
-				action, Long.class, PlantHireRequestResource.class);
-		String link = linkTo(methodLink, phr.getId()).toUri()
-				.toString();
 		resource.add(new ExtendedLink(link, action, method));
 	}
 

@@ -3,21 +3,20 @@ package cs.ut.domain.soap.client;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for getAllPlantsResponse complex type.
+ * <p>Java class for CreatePurchaseOrder complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="getAllPlantsResponse">
+ * &lt;complexType name="CreatePurchaseOrder">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://web.soap.domain.ut.cs/}plantResourceList" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://web.soap.domain.ut.cs/}purchaseOrderResource" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,36 +26,35 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getAllPlantsResponse", propOrder = {
-    "_return"
+@XmlType(name = "CreatePurchaseOrder", propOrder = {
+    "arg0"
 })
-public class GetAllPlantsResponse {
+public class CreatePurchaseOrder {
 
-    @XmlElement(name = "return")
-    protected PlantResourceList _return;
+    protected PurchaseOrderResource arg0;
 
     /**
-     * Gets the value of the return property.
+     * Gets the value of the arg0 property.
      * 
      * @return
      *     possible object is
-     *     {@link PlantResourceList }
+     *     {@link PurchaseOrderResource }
      *     
      */
-    public PlantResourceList getReturn() {
-        return _return;
+    public PurchaseOrderResource getArg0() {
+        return arg0;
     }
 
     /**
-     * Sets the value of the return property.
+     * Sets the value of the arg0 property.
      * 
      * @param value
      *     allowed object is
-     *     {@link PlantResourceList }
+     *     {@link PurchaseOrderResource }
      *     
      */
-    public void setReturn(PlantResourceList value) {
-        this._return = value;
+    public void setArg0(PurchaseOrderResource value) {
+        this.arg0 = value;
     }
 
 }

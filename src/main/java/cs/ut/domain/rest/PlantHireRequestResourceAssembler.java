@@ -10,6 +10,13 @@ public class PlantHireRequestResourceAssembler extends ResourceAssemblerSupport<
 	public PlantHireRequestResourceAssembler () {
 		super(PlantHireRequestRestController.class,PlantHireRequestResource.class);
 		}
+	
+	public PlantHireRequestResourceStatus getPlantHireRequestStatus(PlantHireRequest phr){
+		PlantHireRequestResourceStatus phrStatus = new PlantHireRequestResourceStatus();
+		phrStatus.setStatus(phr.getStatus());
+		return phrStatus;
+		
+	}
 
 	@Override
 	public PlantHireRequestResource toResource(PlantHireRequest phr) {

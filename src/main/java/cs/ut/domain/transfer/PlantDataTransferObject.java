@@ -19,13 +19,11 @@ public class PlantDataTransferObject {
 	
 	@Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
-    @NotNull
 	private DateTime startDate;
 	
 	
 	@Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
-    @NotNull
 	private DateTime endDate;
 	
 	
